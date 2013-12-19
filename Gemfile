@@ -39,8 +39,17 @@ end
 # Use unicorn as the app server
 gem 'unicorn'
 
+gem 'haml-rails'
+
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+group :development, :test do
+  gem 'foreman'
+  gem 'pry-debugger'
+  gem 'rspec-rails', '~> 2.0'
+  gem 'shoulda-matchers'
+end
