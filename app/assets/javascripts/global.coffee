@@ -16,3 +16,7 @@ $(document).ready ->
           cell.css('background-color', d.bgc)
           cell.css('color', d.fgc)
           cell.text(d.cha)
+      if data.new_chats
+        $.each data.new_chats, (index, c) ->
+          cw = $('#chat-window')
+          cw.val( cw.val() + c )

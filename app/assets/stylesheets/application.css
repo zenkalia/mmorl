@@ -12,6 +12,6 @@
  *= require_tree .
  */
 
-body {
+body, textarea {
   font-family: 'courier'
 }

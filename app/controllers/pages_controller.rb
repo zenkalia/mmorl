@@ -24,6 +24,10 @@ class PagesController < ApplicationController
           row: current_user.row,
           col: current_user.col
         }
+      ],
+      new_chats: [
+        "i hate people\n",
+        "fucking kill everyone\n"
       ]
     }
     respond_to do |format|
