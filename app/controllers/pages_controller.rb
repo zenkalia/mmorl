@@ -3,7 +3,7 @@ class PagesController < ApplicationController
   end
 
   def update
-    @key_code = params[:key]
+    @key = params[:key].to_i.chr
     stuff = [
       {
         bgc: :black,
