@@ -7,13 +7,21 @@ class PagesController < ApplicationController
 
     case(@key_code.chr)
     when 'h'
-      current_user.update_attribute(:col, current_user.col - 1)
+      current_user.move(0,-1)
     when 'j'
-      current_user.update_attribute(:row, current_user.row + 1)
+      current_user.move(1,0)
     when 'k'
-      current_user.update_attribute(:row, current_user.row - 1)
+      current_user.move(-1,0)
     when 'l'
-      current_user.update_attribute(:col, current_user.col + 1)
+      current_user.move(0,1)
+    when 'y'
+      current_user.move(-1,-1)
+    when 'u'
+      current_user.move(-1,1)
+    when 'b'
+      current_user.move(1,-1)
+    when 'n'
+      current_user.move(1,1)
     end
     stuff = {
       new_cells: [
