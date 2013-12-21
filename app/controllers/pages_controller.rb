@@ -3,14 +3,25 @@ class PagesController < ApplicationController
   end
 
   def update
-    @key = params[:key].to_i.chr
+    @key_code = params[:key].to_i
+
+    case(@key_code.chr)
+    when 'h'
+      current_user.update_attribute(:col, current_user.col - 1)
+    when 'j'
+      current_user.update_attribute(:row, current_user.row + 1)
+    when 'k'
+      current_user.update_attribute(:row, current_user.row - 1)
+    when 'l'
+      current_user.update_attribute(:col, current_user.col + 1)
+    end
     stuff = [
       {
         bgc: :black,
         fgc: :white,
-        cha: 'e',
-        row: 1,
-        col: 1
+        cha: '@',
+        row: current_user.row,
+        col: current_user.col
       }
     ]
     respond_to do |format|
