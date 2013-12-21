@@ -10,8 +10,9 @@ $(document).ready ->
       url: '/whatever',
       data: {key: key.which}
     }).done (data) ->
-      $.each data, (index, d) ->
-        cell = $("##{d.row}x#{d.col}")
-        cell.css('background-color', d.bgc)
-        cell.css('color', d.fgc)
-        cell.text(d.cha)
+      if data.new_cells
+        $.each data.new_cells, (index, d) ->
+          cell = $("##{d.row}x#{d.col}")
+          cell.css('background-color', d.bgc)
+          cell.css('color', d.fgc)
+          cell.text(d.cha)

@@ -15,15 +15,17 @@ class PagesController < ApplicationController
     when 'l'
       current_user.update_attribute(:col, current_user.col + 1)
     end
-    stuff = [
-      {
-        bgc: :black,
-        fgc: :white,
-        cha: '@',
-        row: current_user.row,
-        col: current_user.col
-      }
-    ]
+    stuff = {
+      new_cells: [
+        {
+          bgc: :black,
+          fgc: :white,
+          cha: '@',
+          row: current_user.row,
+          col: current_user.col
+        }
+      ]
+    }
     respond_to do |format|
       format.json { render :json => stuff }
       format.html { }
