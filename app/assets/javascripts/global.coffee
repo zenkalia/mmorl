@@ -15,4 +15,3 @@ $(document).ready ->
         cell.css('background-color', d.bgc)
         cell.css('color', d.fgc)
         cell.text(d.cha)
-    #alert('hello '+key.which)
