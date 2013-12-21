@@ -40,6 +40,7 @@ end
 gem 'unicorn'
 
 gem 'haml-rails'
+gem 'devise'
 
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development
