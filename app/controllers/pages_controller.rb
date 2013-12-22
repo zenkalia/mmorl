@@ -38,6 +38,16 @@ class PagesController < ApplicationController
         "fucking kill everyone\n"
       ]
     }
+    current_user.room.fixtures.each do |f|
+      stuff[:new_cells] << {
+        bgc: f.bgc,
+        fgc: f.fgc,
+        cha: f.char,
+        row: f.row,
+        col: f.col
+      }
+    end
+
     respond_to do |format|
       format.json { render :json => stuff }
       format.html { }

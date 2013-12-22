@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131221081415) do
+ActiveRecord::Schema.define(version: 20131221230042) do
+
+  create_table "fixtures", force: true do |t|
+    t.integer "room_id"
+    t.boolean "solid"
+    t.string  "char"
+    t.string  "bgc"
+    t.string  "fgc"
+    t.integer "row"
+    t.integer "col"
+  end
+
+  create_table "rooms", force: true do |t|
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -28,6 +41,7 @@ ActiveRecord::Schema.define(version: 20131221081415) do
     t.datetime "updated_at"
     t.integer  "col"
     t.integer  "row"
+    t.integer  "room_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
