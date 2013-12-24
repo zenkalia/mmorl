@@ -19,17 +19,16 @@ class User < ActiveRecord::Base
     c = trigger_c = self.col
     dr = target_row - r
     dc = target_col - c
-    step_dr = step_dc = carry_dr = carry_dc = step_trigger_dr = step_trigger_dc = 0
+    step_dr = step_dc = carry_dr = carry_dc = 0
+    step_trigger_dr = step_trigger_dc = 1 - 0.000001
     if dr.abs > dc.abs
       step_dr = dr / dr.abs if dr != 0
       carry_dc = dc / dc.abs if dc != 0
       step_trigger_dr = dr.abs / dc.abs.to_f - 0.000001
-      step_trigger_dc = 1 - 0.000001
     else
       step_dc = dc / dc.abs if dc != 0
       carry_dr = dr / dr.abs if dr != 0
       step_trigger_dc = dc.abs / dr.abs.to_f - 0.000001
-      step_trigger_dr = 1 - 0.000001
     end
 
     trigger_r += step_trigger_dr / 2
