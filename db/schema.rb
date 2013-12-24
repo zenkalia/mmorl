@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20131221230042) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "fixtures", force: true do |t|
     t.integer "room_id"
     t.boolean "solid"
@@ -39,12 +42,12 @@ ActiveRecord::Schema.define(version: 20131221230042) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "col"
-    t.integer  "row"
+    t.integer  "col",                    default: 1
+    t.integer  "row",                    default: 1
     t.integer  "room_id"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end
