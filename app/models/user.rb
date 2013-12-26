@@ -10,10 +10,16 @@ class User < ActiveRecord::Base
 
   validate :not_standing_on_wall
 
+  after_initialize do
+    self.room = Room.first || Room.create
+  end
+
   def move(dr, dc)
     self.row += dr
     self.col += dc
-    self.save
+    self.save!
+  rescue ActiveRecord::RecordInvalid
+    self.reload
   end
 
   def can_see?(target_row, target_col)
@@ -48,8 +54,6 @@ class User < ActiveRecord::Base
 
   private
   def not_standing_on_wall
-    Fixture.where(room: self.room, row: self.row, col: self.col).each do |f|
-      errors.add(:row, 'not an open cell') if f.solid
-    end
+    errors.add(:row, 'not an open cell') if Fixture.where(room: self.room, row: self.row, col: self.col, solid: true).any?
   end
 end

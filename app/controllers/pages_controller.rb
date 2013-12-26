@@ -23,22 +23,17 @@ class PagesController < ApplicationController
     when 'n'
       current_user.move(1,1)
     end
+    rander = Fixture.where(row: ((current_user.row-1)..(current_user.row+1)), col: ((current_user.col-1)..(current_user.col+1)))
+
     stuff = {
       new_cells: [
-        {
-          bgc: :black,
-          fgc: :white,
-          cha: '@',
-          row: current_user.row,
-          col: current_user.col
-        }
       ],
       new_chats: [
         "i hate people\n",
         "fucking kill everyone\n"
       ]
     }
-    current_user.room.fixtures.each do |f|
+    rander.each do |f|
       stuff[:new_cells] << {
         bgc: f.bgc,
         fgc: f.fgc,
@@ -47,6 +42,14 @@ class PagesController < ApplicationController
         col: f.col
       }
     end
+
+    stuff[:new_cells] << {
+          bgc: :black,
+          fgc: :white,
+          cha: '@',
+          row: current_user.row,
+          col: current_user.col
+        }
 
     respond_to do |format|
       format.json { render :json => stuff }
