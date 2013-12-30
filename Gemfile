@@ -41,6 +41,7 @@ gem 'puma'
 
 gem 'haml-rails'
 gem 'devise'
+gem 'newrelic_rpm'
 
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development
