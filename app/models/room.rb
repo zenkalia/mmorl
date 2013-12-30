@@ -28,7 +28,7 @@ class Room < ActiveRecord::Base
   end
 
   def get_fixture(row, col)
-    return nil if row < 1 or row  > 80 or col < 1 or col > 20
+    return nil if row < 1 or row  > 20 or col < 1 or col > 80
     self.fixtures[(row-1)*80 + col-1]
   end
 end
