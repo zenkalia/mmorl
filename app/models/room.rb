@@ -1,16 +1,34 @@
 class Room < ActiveRecord::Base
   has_many :users
-  has_many :fixtures
 
   after_create do
-    (1..20).each do |row|
-      (1..80).each do |col|
-        if rand > 0.8
-          Fixture.create(room: self, char: '#', solid: true, bgc: 'black', fgc: 'white', row: row, col: col)
-        else
-          Fixture.create(room: self, char: '.', solid: false, bgc: 'black', fgc: 'white', row: row, col: col)
-        end
+    self.fixtures = ''
+    1600.times do
+      if rand > 0.8
+        self.fixtures << '#'
+      else
+        self.fixtures << '.'
       end
     end
+    self.save
+  end
+
+  def visible_to(user)
+    fixtures = []
+    (user.row-1..user.row+1).each do |row|
+      (user.col-1..user.col+1).each do |col|
+        fixtures << {
+          cha: get_fixture(row, col),
+          row: row,
+          col: col
+        }
+      end
+    end
+    fixtures
+  end
+
+  def get_fixture(row, col)
+    return nil if row < 1 or row  > 80 or col < 1 or col > 20
+    self.fixtures[(row-1)*80 + col-1]
   end
 end

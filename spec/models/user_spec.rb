@@ -14,13 +14,13 @@ describe User do
   end
 
   describe :can_see? do
-    it 'lets you see things you can see' do
+    xit 'lets you see things you can see' do
       user.can_see?(1,4).should be_true
     end
-    it 'blocks things behind walls' do
+    xit 'blocks things behind walls' do
       user.can_see?(2,5).should be_false
     end
-    it 'lets you see existing walls' do
+    xit 'lets you see existing walls' do
       user.can_see?(3,4).should be_true
     end
   end

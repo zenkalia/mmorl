@@ -22,6 +22,10 @@ class User < ActiveRecord::Base
     self.reload
   end
 
+  def visible_fixtures
+    self.room.visible_to(self)
+  end
+
   def can_see?(target_row, target_col)
     target = Vector[target_row, target_col]
     consider = trigger = Vector[self.row, self.col]
@@ -54,6 +58,6 @@ class User < ActiveRecord::Base
 
   private
   def not_standing_on_wall
-    errors.add(:row, 'not an open cell') if Fixture.where(room: self.room, row: self.row, col: self.col, solid: true).any?
+    errors.add(:row, 'not an open cell') if self.room.get_fixture(self.row, self.col) == '#'
   end
 end

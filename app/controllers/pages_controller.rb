@@ -23,7 +23,7 @@ class PagesController < ApplicationController
     when 'n'
       current_user.move(1,1)
     end
-    rander = Fixture.where(row: ((current_user.row-1)..(current_user.row+1)), col: ((current_user.col-1)..(current_user.col+1)))
+    rander = current_user.visible_fixtures
 
     stuff = {
       new_cells: [
@@ -35,11 +35,11 @@ class PagesController < ApplicationController
     }
     rander.each do |f|
       stuff[:new_cells] << {
-        bgc: f.bgc,
-        fgc: f.fgc,
-        cha: f.char,
-        row: f.row,
-        col: f.col
+        bgc: 'black',
+        fgc: 'gray',
+        cha: f[:cha],
+        row: f[:row],
+        col: f[:col]
       }
     end
 
