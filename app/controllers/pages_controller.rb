@@ -5,23 +5,23 @@ class PagesController < ApplicationController
   def update
     @key_code = params[:key].to_i
 
-    case(@key_code.chr)
+    msgs = case(@key_code.chr)
     when 'h'
-      msgs = current_user.move(0,-1)
+      current_user.move(0,-1)
     when 'j'
-      msgs = current_user.move(1,0)
+      current_user.move(1,0)
     when 'k'
-      msgs = current_user.move(-1,0)
+      current_user.move(-1,0)
     when 'l'
-      msgs = current_user.move(0,1)
+      current_user.move(0,1)
     when 'y'
-      msgs = current_user.move(-1,-1)
+      current_user.move(-1,-1)
     when 'u'
-      msgs = current_user.move(-1,1)
+      current_user.move(-1,1)
     when 'b'
-      msgs = current_user.move(1,-1)
+      current_user.move(1,-1)
     when 'n'
-      msgs = current_user.move(1,1)
+      current_user.move(1,1)
     end
     rander = current_user.visible_fixtures
 
