@@ -1,5 +1,6 @@
 class Room < ActiveRecord::Base
   has_many :users
+  has_many :items
 
   after_create do
     self.fixtures = ''
@@ -18,13 +19,19 @@ class Room < ActiveRecord::Base
     (user.row-1..user.row+1).each do |row|
       (user.col-1..user.col+1).each do |col|
         fixtures << {
-          cha: get_fixture(row, col),
+          cha: get_cha(row, col),
           row: row,
           col: col
         }
       end
     end
     fixtures
+  end
+
+  def get_cha(row, col)
+    meta_items = Item.where(room: self, row: row, col: col)
+    return ')' if meta_items.any?
+    get_fixture(row, col)
   end
 
   def get_fixture(row, col)

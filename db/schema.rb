@@ -11,10 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131230064242) do
+ActiveRecord::Schema.define(version: 20140102014016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "items", force: true do |t|
+    t.integer "room_id"
+    t.integer "user_id"
+    t.integer "row"
+    t.integer "col"
+    t.string  "slug"
+  end
 
   create_table "rooms", force: true do |t|
     t.text "fixtures"
@@ -40,5 +48,8 @@ ActiveRecord::Schema.define(version: 20131230064242) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+
+  add_foreign_key "items", "rooms", name: "items_room_id_fk"
+  add_foreign_key "items", "users", name: "items_user_id_fk"
 
 end

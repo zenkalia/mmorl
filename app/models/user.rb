@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   belongs_to :room
+  has_many :items
 
   validate :not_standing_on_wall
 
