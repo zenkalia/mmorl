@@ -20,3 +20,4 @@ $(document).ready ->
         $.each data.new_chats, (index, c) ->
           cw = $('#chat-window')
           cw.val( cw.val() + c )
+          $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
