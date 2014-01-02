@@ -42,6 +42,7 @@ gem 'puma'
 gem 'haml-rails'
 gem 'devise'
 gem 'newrelic_rpm'
+gem 'foreigner'
 
 # Use Capistrano for deployment
 # gem 'capistrano', group: :development
