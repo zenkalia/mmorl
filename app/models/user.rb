@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
   end
 
   def move(dr, dc)
+    meta_monsters = Monster.where(room: self.room, row: self.row + dr, col: self.col + dc)
+    return 'hit that shit' if meta_monsters.any?
     self.row += dr
     self.col += dc
     self.save!
