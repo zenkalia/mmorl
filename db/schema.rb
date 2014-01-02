@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140102022715) do
+ActiveRecord::Schema.define(version: 20140102023435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,14 @@ ActiveRecord::Schema.define(version: 20140102022715) do
     t.integer "user_id"
     t.integer "row"
     t.integer "col"
+    t.string  "slug"
+  end
+
+  create_table "monsters", force: true do |t|
+    t.integer "room_id"
+    t.integer "row"
+    t.integer "col"
+    t.integer "health"
     t.string  "slug"
   end
 
@@ -51,6 +59,8 @@ ActiveRecord::Schema.define(version: 20140102022715) do
 
   add_foreign_key "items", "rooms", name: "items_room_id_fk"
   add_foreign_key "items", "users", name: "items_user_id_fk"
+
+  add_foreign_key "monsters", "rooms", name: "monsters_room_id_fk"
 
   add_foreign_key "users", "rooms", name: "users_room_id_fk"
 

@@ -29,6 +29,8 @@ class Room < ActiveRecord::Base
   end
 
   def get_cha(row, col)
+    meta_monsters = Monster.where(room: self, row: row, col: col)
+    return 'g' if meta_monsters.any?
     meta_items = Item.where(room: self, row: row, col: col)
     return ')' if meta_items.any?
     get_fixture(row, col)
