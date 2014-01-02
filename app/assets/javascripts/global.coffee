@@ -19,5 +19,5 @@ $(document).ready ->
       if data.new_chats
         $.each data.new_chats, (index, c) ->
           cw = $('#chat-window')
-          cw.val( cw.val() + c )
+          cw.val( cw.val() + "\n" + c  )
           $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);

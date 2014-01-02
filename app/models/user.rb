@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
     self.save!
   rescue ActiveRecord::RecordInvalid
     self.reload
+    return ['You bump into a wall.']
   end
 
   def visible_fixtures

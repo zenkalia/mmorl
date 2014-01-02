@@ -7,31 +7,28 @@ class PagesController < ApplicationController
 
     case(@key_code.chr)
     when 'h'
-      current_user.move(0,-1)
+      msgs = current_user.move(0,-1)
     when 'j'
-      current_user.move(1,0)
+      msgs = current_user.move(1,0)
     when 'k'
-      current_user.move(-1,0)
+      msgs = current_user.move(-1,0)
     when 'l'
-      current_user.move(0,1)
+      msgs = current_user.move(0,1)
     when 'y'
-      current_user.move(-1,-1)
+      msgs = current_user.move(-1,-1)
     when 'u'
-      current_user.move(-1,1)
+      msgs = current_user.move(-1,1)
     when 'b'
-      current_user.move(1,-1)
+      msgs = current_user.move(1,-1)
     when 'n'
-      current_user.move(1,1)
+      msgs = current_user.move(1,1)
     end
     rander = current_user.visible_fixtures
 
     stuff = {
       new_cells: [
       ],
-      new_chats: [
-        "i hate people\n",
-        "fucking kill everyone\n"
-      ]
+      new_chats: msgs
     }
     rander.each do |f|
       stuff[:new_cells] << {
