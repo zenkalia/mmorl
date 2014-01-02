@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140102014016) do
+ActiveRecord::Schema.define(version: 20140102022715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,5 +51,7 @@ ActiveRecord::Schema.define(version: 20140102014016) do
 
   add_foreign_key "items", "rooms", name: "items_room_id_fk"
   add_foreign_key "items", "users", name: "items_user_id_fk"
+
+  add_foreign_key "users", "rooms", name: "users_room_id_fk"
 
 end
