@@ -12,12 +12,12 @@ class User < ActiveRecord::Base
   validate :not_standing_on_wall
 
   after_initialize do
-    self.room = Room.first || Room.create
+    self.room = Room.first || Room.create if self.new_record?
   end
 
   def move(dr, dc)
     meta_monsters = Monster.where(room: self.room, row: self.row + dr, col: self.col + dc)
-    return 'hit that shit' if meta_monsters.any?
+    return attack(meta_monsters.first) if meta_monsters.any?
     self.row += dr
     self.col += dc
     self.save!
@@ -27,6 +27,14 @@ class User < ActiveRecord::Base
 
   def visible_fixtures
     self.room.visible_to(self)
+  end
+
+  def attack(monster)
+    monster.take_damage_from(self)
+  end
+
+  def damage
+    1
   end
 
   def can_see?(target_row, target_col)

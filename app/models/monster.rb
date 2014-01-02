@@ -10,6 +10,23 @@ class Monster < ActiveRecord::Base
     goblin: 1
   }
 
+  HEALTH_HASH = {
+    goblin: 4
+  }
+
+  after_initialize do
+    self.health = HEALTH_HASH[self.slug] || 1 if self.new_record?
+  end
+
+  before_save do
+    self.destroy if self.health < 1
+  end
+
+  def take_damage_from(user)
+    self.health -= user.damage
+    self.save
+  end
+
   def name
     NAME_HASH[self.slug] || '??????'
   end
