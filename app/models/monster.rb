@@ -3,7 +3,7 @@ class Monster < ActiveRecord::Base
   validates :room, presence: true
 
   NAME_HASH = {
-    goblin: 'a goblin'
+    goblin: 'the goblin'
   }
 
   STR_HASH = {
@@ -25,13 +25,16 @@ class Monster < ActiveRecord::Base
   def take_damage_from(user)
     self.health -= user.damage
     self.save
+    msgs = ["You hit #{self.name} for #{user.damage} damage."]
+    msgs << "#{self.name.capitalize} died!" if self.health < 1
+    msgs
   end
 
   def name
-    NAME_HASH[self.slug] || '??????'
+    NAME_HASH[self.slug.to_sym] || '??????'
   end
 
   def str
-    STR_HASH[self.slug] || 0
+    STR_HASH[self.slug.to_sym] || 0
   end
 end
