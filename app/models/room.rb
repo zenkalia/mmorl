@@ -20,7 +20,7 @@ class Room < ActiveRecord::Base
     (user.row-1..user.row+1).each do |row|
       (user.col-1..user.col+1).each do |col|
         fixtures << {
-          cha: get_cha(row, col),
+          cha: get_cha(row, col, user),
           row: row,
           col: col
         }
@@ -29,7 +29,9 @@ class Room < ActiveRecord::Base
     fixtures
   end
 
-  def get_cha(row, col)
+  def get_cha(row, col, user)
+    meta_users = self.users.select{ |u| u.row == row and u.col == col and u != user}
+    return '@' if meta_users.any?
     meta_monsters = self.monsters.select{ |m| m.row == row and m.col == col}
     return 'g' if meta_monsters.any?
     meta_items = self.items.select{ |i| i.row == row and i.col == col}
