@@ -31,7 +31,16 @@ class User < ActiveRecord::Base
   end
 
   def attack(monster)
-    monster.take_damage_from(self)
+    msgs = []
+    msgs += monster.take_damage_from(self)
+    msgs += take_damage_from(monster) if monster.alive?
+    msgs
+  end
+
+  def take_damage_from(monster)
+    self.health -= monster.damage
+    self.save
+    ["#{monster.name.capitalize} hit you for #{monster.damage} damage."]
   end
 
   def damage

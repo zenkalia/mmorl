@@ -34,7 +34,11 @@ class Monster < ActiveRecord::Base
     NAME_HASH[self.slug.to_sym] || '??????'
   end
 
-  def str
+  def damage
     STR_HASH[self.slug.to_sym] || 0
+  end
+
+  def alive?
+    self.persisted?
   end
 end
