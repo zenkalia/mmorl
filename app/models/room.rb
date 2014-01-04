@@ -1,6 +1,7 @@
 class Room < ActiveRecord::Base
   has_many :users
   has_many :items
+  has_many :monsters
 
   after_create do
     self.fixtures = ''
@@ -29,9 +30,9 @@ class Room < ActiveRecord::Base
   end
 
   def get_cha(row, col)
-    meta_monsters = Monster.where(room: self, row: row, col: col)
+    meta_monsters = self.monsters.select{ |m| m.row == row and m.col == col}
     return 'g' if meta_monsters.any?
-    meta_items = Item.where(room: self, row: row, col: col)
+    meta_items = self.items.select{ |i| i.row == row and i.col == col}
     return ')' if meta_items.any?
     get_fixture(row, col)
   end
