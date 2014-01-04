@@ -70,6 +70,6 @@ class User < ActiveRecord::Base
 
   private
   def not_standing_on_wall
-    errors.add(:row, 'not an open cell') if self.room.get_fixture(self.row, self.col) == '#'
+    errors.add(:row, 'not an open cell') if self.room.get_fixture(self.row, self.col) == '#' or self.row < 1 or self.row > 20 or self.col < 1 or self.col > 80
   end
 end
