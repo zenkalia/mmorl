@@ -5,6 +5,23 @@ class PagesController < ApplicationController
   def update
     @key_code = params[:key].to_i
 
+    rander = current_user.visible_fixtures
+
+    stuff = {
+      new_cells: [
+      ],
+      new_chats: []
+    }
+    rander.each do |f|
+      stuff[:new_cells] << {
+        bgc: 'black',
+        fgc: 'gray',
+        cha: f[:cha],
+        row: f[:row],
+        col: f[:col]
+      }
+    end
+
     msgs = case(@key_code.chr)
     when 'h'
       current_user.move(0,-1)
@@ -23,17 +40,14 @@ class PagesController < ApplicationController
     when 'n'
       current_user.move(1,1)
     end
+    stuff[:new_chats] << msgs
+
     rander = current_user.visible_fixtures
 
-    stuff = {
-      new_cells: [
-      ],
-      new_chats: msgs
-    }
     rander.each do |f|
       stuff[:new_cells] << {
         bgc: 'black',
-        fgc: 'gray',
+        fgc: 'lightgray',
         cha: f[:cha],
         row: f[:row],
         col: f[:col]
