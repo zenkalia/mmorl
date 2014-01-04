@@ -40,7 +40,7 @@ class PagesController < ApplicationController
     when 'n'
       current_user.move(1,1)
     end
-    stuff[:new_chats] << msgs
+    stuff[:new_chats] = msgs
 
     rander = current_user.visible_fixtures
 
