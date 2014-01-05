@@ -4,6 +4,7 @@ class Room < ActiveRecord::Base
   has_many :monsters
 
   after_create do
+    return if self.fixtures
     self.fixtures = ''
     1600.times do
       if rand > 0.8
