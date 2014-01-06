@@ -9,27 +9,29 @@ describe User do
     subject{ user.move(dr, dc) }
     describe 'moving to an open space' do
       let(:dc){ 1 }
-      it 'moves you good' do
+      it 'changes your column' do
         expect{ subject }.to change{ user.col }.from(1).to(2)
+      end
+      it 'does not change your row' do
         expect{ subject }.to_not change{ user.row }
       end
     end
     describe 'you should not be able to move off the map' do
       let(:dc){ -1 }
-      it 'does not move you' do
+      it 'does not change your column' do
         expect{ subject }.to_not change{ user.col }
+      end
+      it 'does not change your row' do
         expect{ subject }.to_not change{ user.row }
       end
     end
     describe 'walls should stop you' do
       let(:dr){ 1 }
-      before do
-        f = room.fixtures
-        f[80] = '#'
-        room.update_attribute(:fixtures, f)
-      end
-      it 'does not move you' do
+      let(:room){ Room.create( fixtures: '.' + '#' * 1599 ) }
+      it 'does not change your column' do
         expect{ subject }.to_not change{ user.col }
+      end
+      it 'does not change your row' do
         expect{ subject }.to_not change{ user.row }
       end
     end
@@ -37,8 +39,10 @@ describe User do
       let(:dc){ 1 }
       let(:monster){ Monster.create(slug: :goblin, row: 1, col: 2, room: room) }
       before { monster }
-      it 'does not move you' do
+      it 'does not change your column' do
         expect{ subject }.to_not change{ user.col }
+      end
+      it 'does not change your row' do
         expect{ subject }.to_not change{ user.row }
       end
       it 'causes you to hit the monster' do
