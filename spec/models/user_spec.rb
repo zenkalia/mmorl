@@ -33,5 +33,20 @@ describe User do
         expect{ subject }.to_not change{ user.row }
       end
     end
+    describe 'enemies should get fucked up' do
+      let(:dc){ 1 }
+      let(:monster){ Monster.create(slug: :goblin, row: 1, col: 2, room: room) }
+      before { monster }
+      it 'does not move you' do
+        expect{ subject }.to_not change{ user.col }
+        expect{ subject }.to_not change{ user.row }
+      end
+      it 'causes you to hit the monster' do
+        expect{ subject; monster.reload }.to change{ monster.health }.by( -user.damage )
+      end
+      it 'causes the monster to hit back' do
+        expect{ subject }.to change{ user.health }.by( -monster.damage )
+      end
+    end
   end
 end
