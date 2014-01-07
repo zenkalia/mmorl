@@ -73,4 +73,14 @@ class PagesController < ApplicationController
       format.html { }
     end
   end
+
+  def refresh
+    stuff = {}
+    stuff[:memory] = current_user.room.fixtures
+
+    respond_to do |format|
+      format.json { render :json => stuff }
+      format.html { }
+    end
+  end
 end

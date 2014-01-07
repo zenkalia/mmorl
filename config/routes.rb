@@ -7,6 +7,7 @@ Mmorl::Application.routes.draw do
   root 'pages#index'
 
   get '/whatever' => 'pages#update'
+  get '/refresh' => 'pages#refresh'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

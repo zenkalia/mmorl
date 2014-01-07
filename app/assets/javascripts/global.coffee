@@ -5,6 +5,15 @@ $(document).ready ->
       $('#game-window').append("<span class='cell' id='#{row}x#{col}'>&nbsp;</span>")
     $('#game-window').append('<br/>')
   $('.cell').css('background-color', 'gray')
+  $.ajax({
+    url: '/refresh',
+  }).done (data) ->
+    if data.memory
+      $.each data.memory.split(''), (index, char) ->
+        cell = $("##{Math.floor(index/80)+1}x#{index%80+1}")
+        cell.css('background-color', 'black')
+        cell.css('color', 'gray')
+        cell.text(char)
   $(document).keypress (key) ->
     $.ajax({
       url: '/whatever',
