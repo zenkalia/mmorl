@@ -76,7 +76,6 @@ class PagesController < ApplicationController
 
   def refresh
     stuff = {}
-    stuff[:memory] = ' ' * 1600
     stuff[:memory] = Memory.first_or_create(user: current_user, room: current_user.room).fixtures
 
     respond_to do |format|
