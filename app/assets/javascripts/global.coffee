@@ -13,6 +13,7 @@ $(document).ready ->
         cell = $("##{Math.floor(index/80)+1}x#{index%80+1}")
         cell.css('background-color', 'black')
         cell.css('color', 'gray')
+        char = "\u00a0" if char == ' '
         cell.text(char)
   $(document).keypress (key) ->
     $.ajax({

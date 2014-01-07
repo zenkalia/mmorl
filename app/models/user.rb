@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
 
   belongs_to :room
   has_many :items
+  has_many :memories
 
   validate :not_standing_on_wall
 
