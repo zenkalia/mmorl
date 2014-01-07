@@ -39,6 +39,12 @@ class PagesController < ApplicationController
       current_user.move(1,-1)
     when 'n'
       current_user.move(1,1)
+    when '>'
+      current_user.enter
+    when '<'
+      current_user.enter
+    when '.'
+      current_user.move(0,0)
     end
     stuff[:new_chats] = msgs
 

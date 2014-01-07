@@ -24,6 +24,19 @@ class User < ActiveRecord::Base
     return ['You bump into a wall.']
   end
 
+  def enter
+    meta_portals = Portal.where(entry_room: self.room, entry_row: self.row, entry_col: self.col)
+    return ['Where are you going?'] unless meta_portals.any?
+    portal = meta_portals.first
+    self.row = portal.exit_row
+    self.col = portal.exit_col
+    self.room = portal.exit_room
+    self.save!
+  rescue ActiveRecord::RecordInvalid
+    self.reload
+    return ['Whoa now...  No time to telefrag yourself.']
+  end
+
   def visible_fixtures
     self.room.visible_to(self)
   end

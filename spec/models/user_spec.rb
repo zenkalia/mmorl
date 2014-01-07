@@ -54,11 +54,14 @@ describe User do
     end
     describe '.enter' do
       let(:exit_room){ Room.create( fixtures: '.' * 1600 ) }
-      let(:stairs_up) { Portal.create( char: '>', entry_room: room, entry_row: user.row, entry_col: user.col,
+      let(:portal) { Portal.create( char: '>', entry_room: room, entry_row: user.row, entry_col: user.col,
                                        exit_room: exit_room, exit_row: 3, exit_col: 3 ) }
-      subject { user.enter }
+      before { portal }
       it 'should move you to that room' do
-        expect{ user.enter }.to change(user.room).to(exit_room)
+        user.enter
+        expect( user.room ).to eq(exit_room)
+        expect( user.row ).to eq(portal.exit_row)
+        expect( user.col ).to eq(portal.exit_col)
       end
     end
   end
