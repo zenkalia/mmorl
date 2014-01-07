@@ -20,16 +20,23 @@ class Room < ActiveRecord::Base
   end
 
   def visible_to(user)
+    memory = Memory.where(user: user, room: self).first
+    memory_fixtures = memory.fixtures
     fixtures = []
     (user.row-1..user.row+1).each do |row|
       (user.col-1..user.col+1).each do |col|
+        c = get_cha(row, col, user)
         fixtures << {
-          cha: get_cha(row, col, user),
+          cha: c,
           row: row,
           col: col
         }
+        memory_index = (row-1)*80 + col - 1
+        memory_fixtures[memory_index] = c if memory_fixtures[memory_index]
       end
     end
+    memory.reload.fixtures = memory_fixtures
+    memory.save
     fixtures
   end
 
