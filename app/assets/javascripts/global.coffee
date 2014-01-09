@@ -8,26 +8,29 @@ $(document).ready ->
   $.ajax({
     url: '/refresh',
   }).done (data) ->
-    if data.memory
-      $.each data.memory.split(''), (index, char) ->
-        cell = $("##{Math.floor(index/80)+1}x#{index%80+1}")
-        cell.css('background-color', 'black')
-        cell.css('color', 'gray')
-        char = "\u00a0" if char == ' '
-        cell.text(char)
+    render(data)
   $(document).keypress (key) ->
     $.ajax({
       url: '/whatever',
       data: {key: key.which}
     }).done (data) ->
-      if data.new_cells
-        $.each data.new_cells, (index, d) ->
-          cell = $("##{d.row}x#{d.col}")
-          cell.css('background-color', d.bgc)
-          cell.css('color', d.fgc)
-          cell.text(d.cha)
-      if data.new_chats
-        $.each data.new_chats, (index, c) ->
-          cw = $('#chat-window')
-          cw.val( cw.val() + "\n" + c  )
-          $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
+      render(data)
+render = (data) ->
+  if data.memory
+    $.each data.memory.split(''), (index, char) ->
+      cell = $("##{Math.floor(index/80)+1}x#{index%80+1}")
+      cell.css('background-color', 'black')
+      cell.css('color', 'gray')
+      char = "\u00a0" if char == ' '
+      cell.text(char)
+  if data.new_cells
+    $.each data.new_cells, (index, d) ->
+      cell = $("##{d.row}x#{d.col}")
+      cell.css('background-color', d.bgc)
+      cell.css('color', d.fgc)
+      cell.text(d.cha)
+  if data.new_chats
+    $.each data.new_chats, (index, c) ->
+      cw = $('#chat-window')
+      cw.val( cw.val() + "\n" + c  )
+      $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
