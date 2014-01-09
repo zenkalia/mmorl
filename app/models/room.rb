@@ -21,7 +21,7 @@ class Room < ActiveRecord::Base
 
   def visible_to(user)
     memory = Memory.where(user: user, room: self).first
-    memory_fixtures = memory.fixtures
+    memory_fixtures = memory.fixtures.clone
     fixtures = []
     (user.row-1..user.row+1).each do |row|
       (user.col-1..user.col+1).each do |col|
@@ -35,7 +35,7 @@ class Room < ActiveRecord::Base
         memory_fixtures[memory_index] = c if memory_fixtures[memory_index]
       end
     end
-    memory.reload.fixtures = memory_fixtures
+    memory.fixtures = memory_fixtures
     memory.save
     fixtures
   end
