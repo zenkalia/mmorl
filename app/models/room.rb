@@ -32,7 +32,7 @@ class Room < ActiveRecord::Base
           col: col
         }
         memory_index = (row-1)*80 + col - 1
-        memory_fixtures[memory_index] = c if memory_fixtures[memory_index]
+        memory_fixtures[memory_index] = c if memory_fixtures[memory_index] and c
       end
     end
     memory.fixtures = memory_fixtures

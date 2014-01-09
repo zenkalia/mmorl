@@ -76,7 +76,7 @@ class PagesController < ApplicationController
 
   def refresh
     stuff = {}
-    stuff[:memory] = Memory.first_or_create(user: current_user, room: current_user.room).fixtures
+    stuff[:memory] = Memory.where(user: current_user, room: current_user.room).first_or_create.fixtures
 
     respond_to do |format|
       format.json { render :json => stuff }
