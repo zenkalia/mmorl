@@ -8,8 +8,7 @@ class PagesController < ApplicationController
     rander = current_user.visible_fixtures
 
     stuff = {
-      new_cells: [
-      ],
+      new_cells: [],
       new_chats: []
     }
     rander.each do |f|
@@ -75,8 +74,30 @@ class PagesController < ApplicationController
   end
 
   def refresh
-    stuff = {}
+    stuff = {
+      new_cells: [],
+    }
     stuff[:memory] = Memory.where(user: current_user, room: current_user.room).first_or_create.fixtures
+
+    rander = current_user.visible_fixtures
+
+    rander.each do |f|
+      stuff[:new_cells] << {
+        bgc: 'black',
+        fgc: 'lightgray',
+        cha: f[:cha],
+        row: f[:row],
+        col: f[:col]
+      }
+    end
+
+    stuff[:new_cells] << {
+          bgc: :black,
+          fgc: :white,
+          cha: '@',
+          row: current_user.row,
+          col: current_user.col
+        }
 
     respond_to do |format|
       format.json { render :json => stuff }
