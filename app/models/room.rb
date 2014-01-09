@@ -48,7 +48,7 @@ class Room < ActiveRecord::Base
     meta_items = self.items.select{ |i| i.row == row and i.col == col }
     return ')' if meta_items.any?
     meta_portals = self.entry_portals.select{ |p| p.entry_row == row and p.entry_col == col }
-    return '>' if meta_portals.any?
+    return meta_portals.first.char if meta_portals.any?
     get_fixture(row, col)
   end
 
