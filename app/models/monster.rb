@@ -3,15 +3,15 @@ class Monster < ActiveRecord::Base
   validates :room, presence: true
 
   NAME_HASH = {
-    goblin: 'the goblin'
+    'goblin' => 'the goblin'
   }
 
   STR_HASH = {
-    goblin: 1
+    'goblin' => 1
   }
 
   HEALTH_HASH = {
-    goblin: 4
+    'goblin' => 4
   }
 
   after_initialize do
@@ -31,11 +31,11 @@ class Monster < ActiveRecord::Base
   end
 
   def name
-    NAME_HASH[self.slug.to_sym] || '??????'
+    NAME_HASH[self.slug] || '??????'
   end
 
   def damage
-    STR_HASH[self.slug.to_sym] || 0
+    STR_HASH[self.slug] || 0
   end
 
   def alive?

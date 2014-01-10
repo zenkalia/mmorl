@@ -7,7 +7,7 @@ class Item < ActiveRecord::Base
 
 
   NAME_HASH = {
-    short_sword: 'Short Sword'
+    'short_sword' => 'short sword'
   }
 
   def name
