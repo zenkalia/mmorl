@@ -64,19 +64,5 @@ describe User do
         expect( user.col ).to eq(portal.exit_col)
       end
     end
-
-    describe 'validations' do
-      describe 'item count' do
-        before do
-          26.times do
-            user.items << Item.create
-          end
-        end
-        subject { user.items << Item.create }
-        it 'raises an invalid record exception' do
-          expect( subject ).to be_false
-        end
-      end
-    end
   end
 end
