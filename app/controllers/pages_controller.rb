@@ -48,6 +48,8 @@ class PagesController < ApplicationController
       stuff[:new_cells] = []
     when '.'
       current_user.move(0,0)
+    when ','
+      current_user.pickup
     end
     stuff[:new_chats] = msgs
 

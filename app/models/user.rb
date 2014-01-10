@@ -38,6 +38,18 @@ class User < ActiveRecord::Base
     return ['Whoa now...  No time to telefrag yourself.']
   end
 
+  def pickup
+    items = self.room.items.select { |i| i.row == self.row and i.col == self.col }
+    item = items.first
+    item.user = self
+    item.room = nil
+    item.save!
+    ["You pick up the #{item.name}"]
+  rescue ActiveRecord::RecordInvalid
+    self.reload
+    return ['You have no space in your pack']
+  end
+
   def visible_fixtures
     self.room.visible_to(self)
   end

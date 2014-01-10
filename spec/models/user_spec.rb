@@ -65,4 +65,27 @@ describe User do
       expect( user.col ).to eq(portal.exit_col)
     end
   end
+  describe '.pickup' do
+    let(:item) { Item.create( slug: :short_sword, room: user.room, row: user.row, col: user.col ) }
+    subject { user.pickup }
+    it 'takes the item off the floor' do
+      expect{ subject; item.reload }.to change{item.room}.to(nil)
+    end
+    it 'puts the item in the users inventory' do
+      expect{ subject; item.reload }.to change{item.user}.to(user)
+    end
+    context 'with no room' do
+      before do
+        26.times do
+          user.items << Item.create
+        end
+      end
+      it 'leaves the item on the floor' do
+        expect{ subject; item.reload }.not_to change{item.room}
+      end
+      it 'puts the item in the users inventory' do
+        expect{ subject; item.reload }.not_to change{item.user}
+      end
+    end
+  end
 end
