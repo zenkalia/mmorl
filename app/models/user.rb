@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   end
 
   def move(dr, dc)
-    meta_monsters = Monster.where(room: self.room, row: self.row + dr, col: self.col + dc)
+    meta_monsters = self.room.monsters.select{ |m| m.row == self.row + dr and m.col == self.col + dc}
     return attack(meta_monsters.first) if meta_monsters.any?
     self.row += dr
     self.col += dc

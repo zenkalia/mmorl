@@ -43,7 +43,7 @@ class Room < ActiveRecord::Base
   def get_cha(row, col, user)
     meta_users = self.users.select{ |u| u.row == row and u.col == col and u != user }
     return '@' if meta_users.any?
-    meta_monsters = self.monsters.select{ |m| m.row == row and m.col == col }
+    meta_monsters = Monster.where(room: self, row: row, col: col)
     return 'g' if meta_monsters.any?
     meta_items = self.items.select{ |i| i.row == row and i.col == col }
     return ')' if meta_items.any?
