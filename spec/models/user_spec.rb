@@ -52,17 +52,17 @@ describe User do
         expect{ subject }.to change{ user.health }.by( -monster.damage )
       end
     end
-    describe '.enter' do
-      let(:exit_room){ Room.create( fixtures: '.' * 1600 ) }
-      let(:portal) { Portal.create( char: '>', entry_room: room, entry_row: user.row, entry_col: user.col,
-                                       exit_room: exit_room, exit_row: 3, exit_col: 3 ) }
-      before { portal }
-      it 'should move you to that room' do
-        user.enter
-        expect( user.room ).to eq(exit_room)
-        expect( user.row ).to eq(portal.exit_row)
-        expect( user.col ).to eq(portal.exit_col)
-      end
+  end
+  describe '.enter' do
+    let(:exit_room){ Room.create( fixtures: '.' * 1600 ) }
+    let(:portal) { Portal.create( char: '>', entry_room: room, entry_row: user.row, entry_col: user.col,
+                                     exit_room: exit_room, exit_row: 3, exit_col: 3 ) }
+    before { portal }
+    it 'should move you to that room' do
+      user.enter
+      expect( user.room ).to eq(exit_room)
+      expect( user.row ).to eq(portal.exit_row)
+      expect( user.col ).to eq(portal.exit_col)
     end
   end
 end
