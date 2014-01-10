@@ -3,6 +3,7 @@ class Item < ActiveRecord::Base
   belongs_to :user
 
   validate :in_exactly_one_room_or_user
+  validate :owner_has_space_for_me
 
 
   NAME_HASH = {
@@ -22,5 +23,9 @@ class Item < ActiveRecord::Base
 
   def not_standing_on_wall
     errors.add(:row, 'not an open cell') if self.room.get_fixture(self.row, self.col) == '#'
+  end
+
+  def owner_has_space_for_me
+    errors.add(:user, 'user carrying too many items') if self.user and self.user.items.count >= 26
   end
 end
