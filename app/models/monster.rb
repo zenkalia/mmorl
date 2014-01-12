@@ -1,6 +1,7 @@
 class Monster < ActiveRecord::Base
   belongs_to :room
   validates :room, presence: true
+  belongs_to :target, class_name: 'User', foreign_key: 'target_id'
 
   NAME_HASH = {
     'goblin' => 'the goblin'
@@ -24,10 +25,19 @@ class Monster < ActiveRecord::Base
 
   def take_damage_from(user)
     self.health -= user.damage
+    self.target ||= user
     self.save
     msgs = ["You hit #{self.name} for #{user.damage} damage."]
     msgs << "#{self.name.capitalize} died!" if self.health < 1
     msgs
+  end
+
+  def tick
+    if target and target.man_distance(self) < 2
+      target.take_damage_from(self)
+    else
+      ["#{self.name.capitalize} gets a turn."]
+    end
   end
 
   def name

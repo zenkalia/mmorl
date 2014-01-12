@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   belongs_to :room
   has_many :items
   has_many :memories
+  has_many :aggro_monsters, class_name: 'Monster', foreign_key: 'target_id'
 
   validate :not_standing_on_wall
 
@@ -20,6 +21,7 @@ class User < ActiveRecord::Base
     self.row += dr
     self.col += dc
     self.save!
+    end_of_turn
   rescue ActiveRecord::RecordInvalid
     self.reload
     return ['You bump into a wall.']
@@ -57,7 +59,7 @@ class User < ActiveRecord::Base
   def attack(monster)
     msgs = []
     msgs += monster.take_damage_from(self)
-    msgs += take_damage_from(monster) if monster.alive?
+    msgs += end_of_turn
     msgs
   end
 
@@ -71,7 +73,21 @@ class User < ActiveRecord::Base
     1
   end
 
+  def man_distance(other)
+    dr = (other.row - self.row).abs
+    dc = (other.col - self.col).abs
+    lateral = (dr - dc).abs
+    diagonal = [dr, dc].max - lateral
+    lateral + diagonal * 1.44
+  end
+
   private
+  def end_of_turn
+    self.aggro_monsters.map do |m|
+      m.tick
+    end
+  end
+
   def not_standing_on_wall
     errors.add(:row, 'not an open cell') if self.room.get_fixture(self.row, self.col) == '#' or self.row < 1 or self.row > 20 or self.col < 1 or self.col > 80
   end
