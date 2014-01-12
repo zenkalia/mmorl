@@ -53,7 +53,6 @@ class PagesController < ApplicationController
     end
     stuff[:new_chats] = msgs
 
-    current_user.room.reload # your action may have changed the state of the room
     rander = current_user.visible_fixtures
 
     rander.each do |f|
