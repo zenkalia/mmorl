@@ -60,7 +60,6 @@ class Room < ActiveRecord::Base
 
     lateral_steps = Array.new(lateral, :lateral)
     diagonal_steps = Array.new(diagonal, :diagonal)
-      #binding.pry if row == 14 and col == 34
     if lateral == 0
       steps = diagonal_steps
     elsif diagonal == 0
@@ -78,7 +77,6 @@ class Room < ActiveRecord::Base
         steps = steps.zip(diagonal_steps.pop(lateral)).flatten.compact
       end
     end
-
 
     steps.each do |s|
       return true if consider == target
