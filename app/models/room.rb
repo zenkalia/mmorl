@@ -28,7 +28,7 @@ class Room < ActiveRecord::Base
     vision_range = 3
     (user.row-vision_range..user.row+vision_range).each do |row|
       (user.col-vision_range..user.col+vision_range).each do |col|
-        if self.can_see?(row, col, user)
+        if self.can_see?(row, col, user) and user.man_distance(row, col) <= vision_range
           c = get_cha(row, col, user)
           fixtures << {
             cha: c,
@@ -50,7 +50,7 @@ class Room < ActiveRecord::Base
     consider = Vector[user.row, user.col]
     diff = target - consider
     lateral = (diff[0].abs - diff[1].abs).abs
-    diagonal = (diff.to_a.max - lateral).abs
+    diagonal = (diff.to_a.map{|v| v.abs}.max - lateral).abs
     flat_diff = Vector[diff[0] == 0 ? 0 : diff[0]/diff[0].abs,
                        diff[1] == 0 ? 0 : diff[1]/diff[1].abs]
 
@@ -58,7 +58,27 @@ class Room < ActiveRecord::Base
                                              : Vector[0, flat_diff[1]]
     diagonal_step = flat_diff
 
-    steps = (Array.new(lateral, :lateral) + Array.new(diagonal, :diagonal)).shuffle
+    lateral_steps = Array.new(lateral, :lateral)
+    diagonal_steps = Array.new(diagonal, :diagonal)
+      #binding.pry if row == 14 and col == 34
+    if lateral == 0
+      steps = diagonal_steps
+    elsif diagonal == 0
+      steps = lateral_steps
+    elsif lateral > diagonal
+      steps = lateral_steps.pop(diagonal)
+      steps = steps.zip(diagonal_steps).flatten.compact
+      while lateral_steps.count > 0
+        steps = steps.zip(lateral_steps.pop(diagonal)).flatten.compact
+      end
+    else
+      steps = diagonal_steps.pop(lateral)
+      steps = steps.zip(lateral_steps).flatten.compact
+      while diagonal_steps.count > 0
+        steps = steps.zip(diagonal_steps.pop(lateral)).flatten.compact
+      end
+    end
+
 
     steps.each do |s|
       return true if consider == target

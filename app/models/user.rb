@@ -73,9 +73,9 @@ class User < ActiveRecord::Base
     1
   end
 
-  def man_distance(other)
-    dr = (other.row - self.row).abs
-    dc = (other.col - self.col).abs
+  def man_distance(row, col)
+    dr = (row - self.row).abs
+    dc = (col - self.col).abs
     lateral = (dr - dc).abs
     diagonal = [dr, dc].max - lateral
     lateral + diagonal * 1.44

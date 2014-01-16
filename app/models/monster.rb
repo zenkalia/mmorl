@@ -33,7 +33,7 @@ class Monster < ActiveRecord::Base
   end
 
   def tick
-    if target and target.man_distance(self) < 2
+    if target and target.man_distance(self.row, self.col) < 2
       target.take_damage_from(self)
     else
       ["#{self.name.capitalize} gets a turn."]
