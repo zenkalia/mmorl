@@ -51,30 +51,20 @@ class Room < ActiveRecord::Base
     diff = target - consider
     lateral = (diff[0].abs - diff[1].abs).abs
     diagonal = (diff.to_a.max - lateral).abs
-    flat_diff = Vector[diff[0] == 0 ? 0 : diff[0].to_f/diff[0].abs.round,
-                       diff[1] == 0 ? 0 : diff[1].to_f/diff[1].abs.round]
+    flat_diff = Vector[diff[0] == 0 ? 0 : diff[0]/diff[0].abs,
+                       diff[1] == 0 ? 0 : diff[1]/diff[1].abs]
 
-    if lateral > diagonal
-      carry = flat_diff.clone
-      step = diff[0].abs > diff[1].abs ? Vector[flat_diff[0], 0]
-                                       : Vector[0, flat_diff[1]]
-    else
-      step = flat_diff.clone
-      carry = diff[0].abs > diff[1].abs ? Vector[flat_diff[0], 0]
-                                        : Vector[0, flat_diff[1]]
-    end
+    lateral_step = diff[0].abs > diff[1].abs ? Vector[flat_diff[0], 0]
+                                             : Vector[0, flat_diff[1]]
+    diagonal_step = flat_diff
 
-    lateral.times do
-      fixture = self.get_fixture(consider[0], consider[1])
-      return false if fixture == '#' or fixture == nil
-      consider += lateral > diagonal ? step : carry
-    end
+    steps = (Array.new(lateral, :lateral) + Array.new(diagonal, :diagonal)).shuffle
 
-    diagonal.times do
+    steps.each do |s|
       return true if consider == target
       fixture = self.get_fixture(consider[0], consider[1])
       return false if fixture == '#' or fixture == nil
-      consider += lateral > diagonal ? carry : step
+      consider += s == :lateral ? lateral_step : diagonal_step
     end
 
     return true
