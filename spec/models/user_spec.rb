@@ -37,7 +37,7 @@ describe User do
     end
     describe 'enemies should get fucked up' do
       let(:dc){ 1 }
-      let(:monster){ Monster.create(slug: :goblin, row: 1, col: 2, room: room) }
+      let(:monster){ Monster.create(slug: 'goblin', row: 1, col: 2, room: room) }
       before { monster }
       it 'does not change your column' do
         expect{ subject }.to_not change{ user.col }
@@ -49,7 +49,7 @@ describe User do
         expect{ subject; monster.reload }.to change{ monster.health }.by( -user.damage )
       end
       it 'causes the monster to hit back' do
-        expect{ subject }.to change{ user.health }.by( -monster.damage )
+        expect{ subject; user.reload }.to change{ user.health }.by( -monster.damage )
       end
     end
   end
