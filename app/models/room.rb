@@ -1,3 +1,5 @@
+require 'matrix'
+
 class Room < ActiveRecord::Base
   has_many :users
   has_many :items
@@ -23,21 +25,59 @@ class Room < ActiveRecord::Base
     memory = Memory.where(user: user, room: self).first
     memory_fixtures = memory.fixtures.clone
     fixtures = []
-    (user.row-1..user.row+1).each do |row|
-      (user.col-1..user.col+1).each do |col|
-        c = get_cha(row, col, user)
-        fixtures << {
-          cha: c,
-          row: row,
-          col: col
-        }
-        memory_index = (row-1)*80 + col - 1
-        memory_fixtures[memory_index] = c if memory_fixtures[memory_index] and c
+    vision_range = 3
+    (user.row-vision_range..user.row+vision_range).each do |row|
+      (user.col-vision_range..user.col+vision_range).each do |col|
+        if self.can_see?(row, col, user)
+          c = get_cha(row, col, user)
+          fixtures << {
+            cha: c,
+            row: row,
+            col: col
+          }
+          memory_index = (row-1)*80 + col - 1
+          memory_fixtures[memory_index] = c if memory_fixtures[memory_index] and c
+        end
       end
     end
     memory.fixtures = memory_fixtures
     memory.save
     fixtures
+  end
+
+  def can_see?(row, col, user)
+    target = Vector[row, col]
+    consider = Vector[user.row, user.col]
+    diff = target - consider
+    lateral = (diff[0] - diff[1]).abs
+    diagonal = diff.to_a.max - lateral
+    #trigger_step = Vector[0.999999, 0.999999]
+    #carry = Vector[0, 0]
+    flat_diff = Vector[diff[0] == 0 ? 0 : diff[0]/diff[0].abs,
+                       diff[1] == 0 ? 0 : diff[1]/diff[1].abs]
+    if lateral > diagonal
+      carry = flat_diff
+      step = diff[0].abs > diff[1].abs ? step = Vector[flat_diff[0], 0]
+                                       : step = Vector[0, flat_diff[1]]
+    else
+      step = flat_diff
+      carry = diff[0].abs > diff[1].abs ? step = Vector[flat_diff[0], 0]
+                                        : step = Vector[0, flat_diff[1]]
+    end
+
+    lateral.times do
+      fixture = self.get_fixture(consider[0], consider[1])
+      return false if fixture == '#' or fixture == nil
+      consider += lateral > diagonal ? step : carry
+    end
+
+    diagonal.times do
+      fixture = self.get_fixture(consider[0], consider[1])
+      return false if fixture == '#' or fixture == nil
+      consider += lateral > diagonal ? carry : step
+    end
+
+    return true
   end
 
   def get_cha(row, col, user)
