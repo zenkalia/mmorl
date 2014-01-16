@@ -49,20 +49,19 @@ class Room < ActiveRecord::Base
     target = Vector[row, col]
     consider = Vector[user.row, user.col]
     diff = target - consider
-    lateral = (diff[0] - diff[1]).abs
-    diagonal = diff.to_a.max - lateral
-    #trigger_step = Vector[0.999999, 0.999999]
-    #carry = Vector[0, 0]
-    flat_diff = Vector[diff[0] == 0 ? 0 : diff[0]/diff[0].abs,
-                       diff[1] == 0 ? 0 : diff[1]/diff[1].abs]
+    lateral = (diff[0].abs - diff[1].abs).abs
+    diagonal = (diff.to_a.max - lateral).abs
+    flat_diff = Vector[diff[0] == 0 ? 0 : diff[0].to_f/diff[0].abs.round,
+                       diff[1] == 0 ? 0 : diff[1].to_f/diff[1].abs.round]
+
     if lateral > diagonal
-      carry = flat_diff
-      step = diff[0].abs > diff[1].abs ? step = Vector[flat_diff[0], 0]
-                                       : step = Vector[0, flat_diff[1]]
+      carry = flat_diff.clone
+      step = diff[0].abs > diff[1].abs ? Vector[flat_diff[0], 0]
+                                       : Vector[0, flat_diff[1]]
     else
-      step = flat_diff
-      carry = diff[0].abs > diff[1].abs ? step = Vector[flat_diff[0], 0]
-                                        : step = Vector[0, flat_diff[1]]
+      step = flat_diff.clone
+      carry = diff[0].abs > diff[1].abs ? Vector[flat_diff[0], 0]
+                                        : Vector[0, flat_diff[1]]
     end
 
     lateral.times do
@@ -72,6 +71,7 @@ class Room < ActiveRecord::Base
     end
 
     diagonal.times do
+      return true if consider == target
       fixture = self.get_fixture(consider[0], consider[1])
       return false if fixture == '#' or fixture == nil
       consider += lateral > diagonal ? carry : step
