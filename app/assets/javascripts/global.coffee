@@ -1,4 +1,6 @@
 last_chat_id = 0
+chat_delay = 1000
+chat_timeout = 'scoping~'
 
 $(document).ready ->
   $('#game-window').html('')
@@ -12,6 +14,9 @@ $(document).ready ->
   }).done (data) ->
     render(data)
   $(document).keypress (key) ->
+    clearTimeout(chat_timeout)
+    chat_delay = 1000
+    chat_timeout = setTimeout( dumb_refresh, chat_delay )
     if $('#chat-input').is(':focus')
       if key.keyCode == 13
         $.ajax({
@@ -30,6 +35,7 @@ $(document).ready ->
       data: {key: key.which, last_chat_id: last_chat_id}
     }).done (data) ->
       render(data)
+  chat_timeout = setTimeout( dumb_refresh, chat_delay )
 render = (data) ->
   if data.memory
     $.each data.memory.split(''), (index, char) ->
@@ -51,3 +57,11 @@ render = (data) ->
       $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
   if data.last_chat_id
     last_chat_id = data.last_chat_id
+dumb_refresh = ->
+  $.ajax({
+    url: '/whatever',
+    data: {key: 0, last_chat_id: last_chat_id}
+  }).done (data) ->
+    render(data)
+  chat_delay += 1000
+  chat_timeout = setTimeout( dumb_refresh, chat_delay )
