@@ -1,3 +1,5 @@
+last_chat_id = 0
+
 $(document).ready ->
   $('#game-window').html('')
   for row in [1..20]
@@ -12,7 +14,11 @@ $(document).ready ->
   $(document).keypress (key) ->
     if $('#chat-input').is(':focus')
       if key.keyCode == 13
-        alert('send message')
+        $.ajax({
+          url: '/whatever',
+          data: {chat: $('#chat-input').val(), last_chat_id: last_chat_id}
+        }).done (data) ->
+          render(data)
         $('#chat-input').val('')
         $('#chat-input').blur()
       return true
@@ -21,7 +27,7 @@ $(document).ready ->
       return true
     $.ajax({
       url: '/whatever',
-      data: {key: key.which}
+      data: {key: key.which, last_chat_id: last_chat_id}
     }).done (data) ->
       render(data)
 render = (data) ->
@@ -43,3 +49,5 @@ render = (data) ->
       cw = $('#chat-window')
       cw.val( cw.val() + "\n" + c  )
       $('#chat-window').scrollTop($('#chat-window')[0].scrollHeight);
+  if data.last_chat_id
+    last_chat_id = data.last_chat_id

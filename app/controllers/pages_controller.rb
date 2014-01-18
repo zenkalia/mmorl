@@ -3,7 +3,11 @@ class PagesController < ApplicationController
   end
 
   def update
+    @chat = params[:chat]
+    @last_chat_id = params[:last_chat_id]
     @key_code = params[:key].to_i
+
+    ChatMessage.create(public_body: "#{current_user.nick} > #{@chat}") if @chat
 
     rander = current_user.visible_fixtures
 
@@ -51,7 +55,7 @@ class PagesController < ApplicationController
     when ','
       current_user.pickup
     end
-    stuff[:new_chats] = msgs
+    stuff[:new_chats] += msgs.to_a # FIXME
 
     rander = current_user.visible_fixtures
 
@@ -66,12 +70,18 @@ class PagesController < ApplicationController
     end
 
     stuff[:new_cells] << {
-          bgc: :black,
-          fgc: :white,
-          cha: '@',
-          row: current_user.row,
-          col: current_user.col
-        }
+      bgc: :black,
+      fgc: :white,
+      cha: '@',
+      row: current_user.row,
+      col: current_user.col
+    }
+
+    chat_meta = ChatMessage.where('created_at > ?', Time.now - 5.minutes).where('id > ?', @last_chat_id.to_i)
+    chat_meta.each do |c|
+      stuff[:new_chats] << c.message_for(current_user)
+      stuff[:last_chat_id] = c.id
+    end
 
     respond_to do |format|
       format.json { render :json => stuff }

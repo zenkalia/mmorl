@@ -5,6 +5,7 @@ class Room < ActiveRecord::Base
   has_many :items
   has_many :monsters
   has_many :memories
+  has_many :chat_messages
   has_many :entry_portals, class_name: 'Portal', foreign_key: 'entry_room_id'
   has_many :exit_portals, class_name: 'Portal', foreign_key: 'exit_room_id'
 

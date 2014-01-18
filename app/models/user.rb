@@ -7,12 +7,17 @@ class User < ActiveRecord::Base
   belongs_to :room
   has_many :items
   has_many :memories
+  has_many :chat_messages
   has_many :aggro_monsters, class_name: 'Monster', foreign_key: 'target_id'
 
   validate :not_standing_on_wall
 
   after_initialize do
     self.room = Room.first || Room.create if self.new_record?
+  end
+
+  def nick
+    'Steve Perry'
   end
 
   def move(dr, dc)

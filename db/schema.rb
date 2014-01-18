@@ -11,10 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140110222039) do
+ActiveRecord::Schema.define(version: 20140118030857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "chat_messages", force: true do |t|
+    t.integer  "room_id"
+    t.integer  "user_id"
+    t.string   "body"
+    t.string   "public_body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "items", force: true do |t|
     t.integer "room_id"
