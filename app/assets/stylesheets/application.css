@@ -22,5 +22,9 @@ body, textarea {
 
 #chat-window {
   width: 100%;
-  height: 300
+  height: 200
+}
+
+#chat-input {
+  width: 100%;
 }

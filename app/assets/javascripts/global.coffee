@@ -10,6 +10,15 @@ $(document).ready ->
   }).done (data) ->
     render(data)
   $(document).keypress (key) ->
+    if $('#chat-input').is(':focus')
+      if key.keyCode == 13
+        alert('send message')
+        $('#chat-input').val('')
+        $('#chat-input').blur()
+      return true
+    if key.keyCode == 13
+      $('#chat-input').focus()
+      return true
     $.ajax({
       url: '/whatever',
       data: {key: key.which}
