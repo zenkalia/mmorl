@@ -105,4 +105,11 @@ class Room < ActiveRecord::Base
     return nil if row < 1 or row  > 20 or col < 1 or col > 80
     self.fixtures[(row-1)*80 + col-1]
   end
+
+  def monster_get_cha(row, col)
+    meta_users = self.users.select{ |u| u.row == row and u.col == col }
+    return '@' if meta_users.any?
+    get_fixture(row, col)
+  end
+
 end
