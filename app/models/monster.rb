@@ -39,8 +39,29 @@ class Monster < ActiveRecord::Base
     if target and target.man_distance(self.row, self.col) < 2
       target.take_damage_from(self)
     else
-      ["#{self.name.capitalize} gets a turn."]
+      move_toward_target!
+      []
     end
+  end
+
+  def move_toward_target!
+    return unless self.room == target.room
+    candidates = [[-1,-1], [-1,0], [-1,1], [0,-1], [0,1], [1,-1], [1,0], [1,1]]
+
+    candidates.sort! do |a,b|
+      target.man_distance(self.row + a[0], self.col + a[1]) <=> target.man_distance(self.row + b[0], self.col + b[1])
+    end
+
+    candidates.each do |c|
+      if self.room.monster_get_cha(self.row + c[0], self.col + c[1]) == '.'
+        self.row += c[0]
+        self.col += c[1]
+        self.save
+        return
+      end
+    end
+  rescue ActiveRecord::RecordInvalid
+    []
   end
 
   def name

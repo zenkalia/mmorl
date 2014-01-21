@@ -57,6 +57,7 @@ class PagesController < ApplicationController
     end
     stuff[:new_chats] += msgs.to_a # FIXME
 
+    current_user.room.reload # do i need this?  the state of the room can change i guess...
     rander = current_user.visible_fixtures
 
     rander.each do |f|
