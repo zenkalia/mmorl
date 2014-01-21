@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
   def end_of_turn
     self.aggro_monsters.map do |m|
       m.tick
-    end
+    end.flatten
   end
 
   def not_standing_on_wall
