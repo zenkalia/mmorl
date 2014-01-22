@@ -26,18 +26,18 @@ class Room < ActiveRecord::Base
     memory = Memory.where(user: user, room: self).first
     memory_fixtures = memory.fixtures.clone
     fixtures = []
-    vision_range = 3
+    vision_range = user.vision_range
     (user.row-vision_range..user.row+vision_range).each do |row|
       (user.col-vision_range..user.col+vision_range).each do |col|
         if self.can_see?(row, col, user) and user.man_distance(row, col) <= vision_range
-          c = get_cha(row, col, user)
           fixtures << {
-            cha: c,
+            cha: get_cha(row, col, user),
             row: row,
             col: col
           }
+          f = get_fixture(row, col)
           memory_index = (row-1)*80 + col - 1
-          memory_fixtures[memory_index] = c if memory_fixtures[memory_index] and c
+          memory_fixtures[memory_index] = f if memory_fixtures[memory_index] and f
         end
       end
     end
@@ -111,5 +111,4 @@ class Room < ActiveRecord::Base
     return '@' if meta_users.any?
     get_fixture(row, col)
   end
-
 end

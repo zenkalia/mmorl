@@ -57,8 +57,20 @@ class User < ActiveRecord::Base
     return ['You have no space in your pack']
   end
 
+  def vision_range
+    3
+  end
+
   def visible_fixtures
     self.room.visible_to(self)
+  end
+
+  def remembered_fixtures
+    self.memory.visible
+  end
+
+  def memory
+    @memory ||= Memory.where(user: self, room: self.room).first_or_create
   end
 
   def attack(monster)

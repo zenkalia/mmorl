@@ -9,7 +9,7 @@ class PagesController < ApplicationController
 
     ChatMessage.create(public_body: "#{current_user.nick} > #{@chat}") if @chat
 
-    rander = current_user.visible_fixtures
+    rander = current_user.remembered_fixtures
 
     stuff = {
       new_cells: [],
@@ -44,7 +44,7 @@ class PagesController < ApplicationController
       current_user.move(1,1)
     when '>'
       current_user.enter
-      stuff[:memory] = Memory.where(user: current_user, room: current_user.room).first_or_create.fixtures
+      stuff[:memory] = user.memory.fixtures
       stuff[:new_cells] = []
     when '<'
       current_user.enter
