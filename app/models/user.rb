@@ -83,7 +83,10 @@ class User < ActiveRecord::Base
   def take_damage_from(monster)
     self.health -= monster.damage
     self.save
-    ["#{monster.name.capitalize} hit you for #{monster.damage} damage."]
+    ChatMessage.create( user: self,
+                 public_body: "#{monster.name.capitalize} hit #{self.nick} for #{monster.damage} damage.",
+                        body: "#{monster.name.capitalize} hit you for #{monster.damage} damage." )
+    []
   end
 
   def damage

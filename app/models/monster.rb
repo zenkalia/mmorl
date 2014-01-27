@@ -28,11 +28,14 @@ class Monster < ActiveRecord::Base
 
   def take_damage_from(user)
     self.health -= user.damage
-    self.target ||= user
+    self.target = user
     self.save
-    msgs = ["You hit #{self.name} for #{user.damage} damage."]
-    msgs << "#{self.name.capitalize} died!" if self.health < 1
-    msgs
+
+    ChatMessage.create( user: user,
+                 public_body: "#{user.nick.capitalize} hit #{self.name} for #{user.damage} damage.",
+                        body: "You hit #{self.name} for #{user.damage} damage." )
+    ChatMessage.create( public_body: "#{self.name.capitalize} died!" ) if self.health < 1
+    []
   end
 
   def tick
