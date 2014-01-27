@@ -103,9 +103,9 @@ class User < ActiveRecord::Base
 
   private
   def end_of_turn
-    self.aggro_monsters.map do |m|
-      m.tick
-    end.flatten
+    self.room.monsters.each do |m|
+      m.tick if self.aggro_monsters.include? m
+    end
   end
 
   def not_standing_on_wall
