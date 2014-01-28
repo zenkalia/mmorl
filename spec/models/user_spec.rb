@@ -88,4 +88,32 @@ describe User do
       end
     end
   end
+  describe '.drop' do
+    let(:item) { Item.create }
+    before do
+      user.items << item
+    end
+    subject { user.drop(item) }
+    it 'puts the item on the ground' do
+      subject
+      expect(item.row).to eq(user.row)
+      expect(item.col).to eq(user.col)
+      expect(item.room).to eq(user.room)
+      expect(item.user).to eq(nil)
+    end
+  end
+  describe '.drop_letter' do
+    let(:item) { Item.create }
+    before do
+      user.items << item
+    end
+    subject { user.drop_letter(item.letter) }
+    it 'drops the item' do
+      subject
+      expect(item.row).to eq(user.row)
+      expect(item.col).to eq(user.col)
+      expect(item.room).to eq(user.room)
+      expect(item.user).to eq(nil)
+    end
+  end
 end

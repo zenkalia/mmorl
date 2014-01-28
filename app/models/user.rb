@@ -57,6 +57,19 @@ class User < ActiveRecord::Base
     return ['You have no space in your pack']
   end
 
+  def drop(item)
+    item.room = self.room
+    item.user = nil
+    item.row = self.row
+    item.col = self.col
+    item.save
+  end
+
+  def drop_letter(letter)
+    item = self.items.select{|i| i.letter == letter}.first
+    self.drop(item) if item
+  end
+
   def vision_range
     3
   end
