@@ -77,6 +77,7 @@ class PagesController < ApplicationController
       col: current_user.col
     }
 
+    # this needs to check for both empty room id or same room id
     chat_meta = ChatMessage.where('created_at > ?', Time.now - 5.minutes).where('id > ?', @last_chat_id.to_i)
     chat_meta.each do |c|
       stuff[:new_chats] << c.message_for(current_user)
