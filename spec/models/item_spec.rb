@@ -17,4 +17,11 @@ describe Item do
       end
     end
   end
+  describe 'item letters' do
+    it 'assigns letters in alphabetical order' do
+      item = Item.create
+      user.items << item
+      expect(item.letter).to eq('a')
+    end
+  end
 end

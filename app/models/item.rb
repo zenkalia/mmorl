@@ -5,6 +5,16 @@ class Item < ActiveRecord::Base
   validate :in_exactly_one_room_or_user
   validate :owner_has_space_for_me
 
+  before_save do
+    if self.user
+      items = self.user.items
+      ('a'..'z').each do |l|
+        return self.letter = l unless items.select{ |i| i.letter == l }.any?
+      end
+    else
+      self.letter = nil
+    end
+  end
 
   NAME_HASH = {
     'short_sword' => 'short sword'
